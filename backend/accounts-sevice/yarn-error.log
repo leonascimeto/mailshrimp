@@ -1,0 +1,41 @@
+Arguments: 
+  /home/leo/.nvm/versions/node/v17.3.1/bin/node /home/leo/.nvm/versions/node/v17.3.1/bin/yarn add express hemelt
+
+PATH: 
+  /home/leo/.nvm/versions/node/v17.3.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  17.3.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/hemelt: Not found
+      at Request.params.callback [as _callback] (/home/leo/.nvm/versions/node/v17.3.1/lib/node_modules/yarn/lib/cli.js:66145:18)
+      at Request.self.callback (/home/leo/.nvm/versions/node/v17.3.1/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (/home/leo/.nvm/versions/node/v17.3.1/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (/home/leo/.nvm/versions/node/v17.3.1/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "accounts-sevice",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
