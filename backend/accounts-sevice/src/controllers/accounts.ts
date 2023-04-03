@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IAccount } from "../models/accounts";
-import {AccountModel, findAll, findById, createAccount, updateAccount} from '../models/accountModel'
-import { hashPassword } from "../auth";
+import {AccountModel, findAll, findById, createAccount, updateAccount, findByEmail} from '../models/accountModel'
+import { hashPassword, comparePassword, sign } from "../auth";
 
 async function getAccounts(req: Request, res: Response, next: any) {
   const accounts = await findAll()
@@ -62,18 +62,19 @@ async function setAccount(req: Request, res: Response, next: any) {
   }
 }
 
-function loginAccount(req: Request, res: Response, next: any){
+async function loginAccount(req: Request, res: Response, next: any){
   try {
     const loginParams = req.body as IAccount;
-  
-    const index = accounts.findIndex(
-      account => account.email === loginParams.email && 
-      account.password === loginParams.password
-    )
-  
-    if (index === -1) return res.status(401).end()
+    const account = await findByEmail(loginParams.email)
 
-    res.json({auth: true, token: {}})
+    if(!account) return res.status(401).end()
+    
+    const isValid = comparePassword(loginParams.password, account.password)
+    if(!isValid) return res.status(401).end()
+
+    const token = sign(account.id!)
+    
+    res.json({auth: true, token})
     
   } catch (error) {
     

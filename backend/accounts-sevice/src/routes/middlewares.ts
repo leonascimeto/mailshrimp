@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import Joi from "joi"
+import { verify } from "../auth"
 import { accountSchema, loginSchema, accountUpdateSchema } from "../models/accountsSchemas"
 
 function validateSchema(schema: Joi.ObjectSchema<any>, req: Request, res: Response, next: any) {
@@ -25,4 +26,22 @@ function validateLogin(req: Request, res: Response, next: any) {
    return validateSchema(loginSchema, req, res, next)
 }
 
-export {validateAccounts, validateLogin, validateUpdateAccounts}
+async function validateAuth(req: Request, res: Response, next: any) {
+   try {
+      const token = req.headers.authorization as string
+      console.log({token})
+      if(!token) return res.status(401).end()
+
+      const payload = await verify(token)
+      if(!payload) return res.status(401).end()
+
+      res.locals.payload = payload
+
+      next()   
+   } catch (error) {
+      console.log(error)
+      res.status(400).end()
+   }
+}
+
+export {validateAccounts, validateLogin, validateUpdateAccounts, validateAuth}
