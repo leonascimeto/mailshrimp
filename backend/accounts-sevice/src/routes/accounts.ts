@@ -1,6 +1,6 @@
 import { Router} from 'express'
 import { addAccount, getAccount, getAccounts, loginAccount, logout, setAccount } from '../controllers/accounts'
-import { validateAccounts, validateLogin, validateUpdateAccounts, validateAuth } from './middlewares'
+import { validateAccountSchema, validateLoginSchema, validateUpdateAccountSchema, validateAuth } from './middlewares'
 
 const router = Router()
 
@@ -8,12 +8,12 @@ router.get('/accounts/', validateAuth, getAccounts)
 
 router.get('/accounts/:id', validateAuth, getAccount)
 
-router.patch('/accounts/:id', validateAuth, validateUpdateAccounts, setAccount)
+router.patch('/accounts/:id', validateAuth, validateUpdateAccountSchema, setAccount)
 
-router.post('/accounts/', validateAccounts, addAccount)
+router.post('/accounts/', validateAccountSchema, addAccount)
 
-router.post('/accounts/login', validateLogin, loginAccount)
+router.post('/accounts/login', validateLoginSchema, loginAccount)
 
-router.post('/accounts/logout', validateAuth, logout)
+router.post('/accounts/logout', logout)
 
 export default router

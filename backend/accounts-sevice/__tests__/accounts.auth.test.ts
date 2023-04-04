@@ -1,22 +1,36 @@
 import request from 'supertest'
 import app from '../src/app'
+import { createAccount, deleteByEmail, findByEmail } from '../src/models/accountRepository'
+import { IAccount } from '../src/models/accounts'
+
+const testMail = 'jest@jest.com'
+const hashPassword = '$2a$10$2K03Fc6d.U/nfVVVYecvtui5qdSpzu/OU8mfur57toHXSCPSGvWdm' // 123456789
+const testPassword = '123456'
+
+beforeAll(async () => {
+   const testAccount: IAccount = {
+      name: 'jest',
+      email: testMail,
+      password: hashPassword,
+      domain: 'jest.com'
+   }
+
+   const result = await createAccount(testAccount)
+   console.log("Before All", result)
+})
+
+afterAll(async () => {
+   const result = await deleteByEmail(testMail)
+   console.log("After All", result)
+})
 
 describe('Testando rotas de autenticação', () => {
 
    it('POST /accounts/login - Deve retornar status code 200', async () => {
-      // mocking
-      const newAccount = {
-         id: 1,
-         name: 'Leonardo Fernandes',
-         email: 'leonidas@gmail.com',
-         password: '123456',
-      }
-
-      await request(app).post('/accounts').send(newAccount)
 
       const payload = {
-         email: 'leonidas@gmail.com',
-         password: '123456'
+         email: testMail,
+         password: testPassword
       }
 
       const result = await request(app).post('/accounts/login').send(payload)
@@ -29,8 +43,7 @@ describe('Testando rotas de autenticação', () => {
 
    it('POST /accounts/login - 422 Unprocessable Entity', async () => {
       const payload = {
-         email: 'nascimentoleo899@gmail.com',
-         password: 'abc'
+         email: testMail,
       }
  
       const result = await request(app).post('/accounts/login').send(payload)
@@ -40,8 +53,8 @@ describe('Testando rotas de autenticação', () => {
 
    it('POST /accounts/login - 401 Unauthorized', async () => {
       const payload = {
-         email: 'nascimentoleo899@gmail.com',
-         password: 'abcabc'
+         email: testMail,
+         password: testPassword + 'abc'
       }
  
       const result = await request(app).post('/accounts/login').send(payload)

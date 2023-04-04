@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IAccount } from "../models/accounts";
-import {AccountModel, findAll, findById, createAccount, updateAccount, findByEmail} from '../models/accountModel'
 import { hashPassword, comparePassword, sign } from "../auth";
+import { createAccount, findAll, findByEmail, findById, updateAccount } from "../models/accountRepository";
 
 async function getAccounts(req: Request, res: Response, next: any) {
   const accounts = await findAll()
@@ -15,7 +15,7 @@ async function getAccount(req: Request, res: Response, next: any) {
   try {
     const id = +req.params.id
 
-    if(!id) throw new Error('Invalid ID')
+    if(!id) return res.status(400).end()
 
     const account = await findById(id)
     
@@ -51,9 +51,16 @@ async function addAccount(req: Request, res: Response, next: any) {
 async function setAccount(req: Request, res: Response, next: any) {
   try {
     const accountId = +req.params.id
-    if(!accountId) throw new Error('Invalid ID')
+    if(!accountId) return res.status(400).end()
+
     const accountParams: IAccount = req.body as IAccount
+    if(accountParams.password) 
+      accountParams.password = hashPassword(accountParams.password)
+
     const updatedAccount = await updateAccount(accountId, accountParams)
+
+    if(!updatedAccount) return res.status(404).end()
+
     updatedAccount.password = ''
     res.status(200).json(updatedAccount)
   } catch (error) {
