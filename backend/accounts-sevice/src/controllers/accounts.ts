@@ -4,7 +4,7 @@ import { hashPassword, comparePassword, sign } from "../auth";
 import { createAccount, findAll, findByEmail, findById, updateAccount } from "../models/accountRepository";
 
 async function getAccounts(req: Request, res: Response, next: any) {
-  const accounts = await findAll()
+  const accounts : IAccount[] = await findAll()
   res.json(accounts.map(item => {
     item.password = ''
     return item

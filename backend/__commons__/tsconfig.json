@@ -3,15 +3,11 @@
      "target": "es6",
      "module": "commonjs",
      "outDir": "./dist/",
-     "rootDirs": ["./src/", "../__commons__/src"],
+     "rootDir": "./src/",
      "strict": true,
      "esModuleInterop": true,
      "forceConsistentCasingInFileNames": true,
-     "moduleResolution": "node",
-     "baseUrl": ".",
-     "paths": {
-       "ms-commons/*": ["../__commons__/src/*"]
-     },
+     "moduleResolution": "node"
    },
    "exclude": [
      "node_modules",

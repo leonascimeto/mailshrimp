@@ -16,4 +16,3 @@ import database from 'ms-commons/data/db';
   }
 
 })()
-  
