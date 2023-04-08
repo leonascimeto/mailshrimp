@@ -8,6 +8,8 @@ const dbHost = process.env.DB_HOST!
 
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {host: dbHost, dialect: 'mysql', logging: false})
 
+console.log({dbName, dbUser, dbPassword, dbHost})
+
 console.log('Connecting to database...')
 
 export default sequelize

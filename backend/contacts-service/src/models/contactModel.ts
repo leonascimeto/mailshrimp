@@ -1,6 +1,6 @@
 import Sequelize, {Optional, Model} from "sequelize"
 import database from "ms-commons/data/db"
-import { IContact } from "./contacts"
+import { IContact } from "./contact"
 
 
 interface IContactCreationAttributes extends Optional<IContact, "id"> {}

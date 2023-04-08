@@ -2,8 +2,9 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import authCommons, {Token} from 'ms-commons/api/auth'
+import path from 'path'
 
-const privateKey = fs.readFileSync('./keys/private.key', 'utf8')
+const privateKey = fs.readFileSync(path.resolve(__dirname,'../keys/private.key'), 'utf8')
 const jwtExpirySeconds = parseInt(`${process.env.JWT_EXPIRES}`)
 const algorithmJWT = 'RS256'
 

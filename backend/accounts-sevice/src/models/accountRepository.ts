@@ -2,23 +2,23 @@ import { DestroyOptions } from "sequelize";
 import accountModel, { IAccountModel } from "./accountModel";
 import { IAccount } from "./accounts";
 
-export function findAll(){
+function findAll(){
    return accountModel.findAll<IAccountModel>();
 }
 
-export function findById(id: number){
+function findById(id: number){
    return accountModel.findByPk<IAccountModel>(id);
 }
 
-export function findByEmail(email: string){
+function findByEmail(email: string){
    return accountModel.findOne<IAccountModel>({where: {email}});
 }
 
-export function createAccount(account: IAccount){
+function createAccount(account: IAccount){
    return accountModel.create<IAccountModel>(account);
 }
 
-export async function updateAccount(id: number, account: IAccount){
+async function updateAccount(id: number, account: IAccount){
    const originalAccount = await accountModel.findByPk<IAccountModel>(id);
    if(originalAccount){
       if(account.email) originalAccount.email = account.email
@@ -34,10 +34,12 @@ export async function updateAccount(id: number, account: IAccount){
    return null
 }
 
-export function deleteAccount(id: number){
+function deleteAccount(id: number){
    return accountModel.destroy({where: {id}} as DestroyOptions<IAccount>)
 }
 
-export function deleteByEmail(email: string){
+function deleteByEmail(email: string){
    return accountModel.destroy({where: {email}} as DestroyOptions<IAccount>)
 }
+
+export default { createAccount, deleteAccount, deleteByEmail, findAll, findByEmail, findById, updateAccount }

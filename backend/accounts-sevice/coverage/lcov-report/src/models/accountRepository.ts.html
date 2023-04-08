@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.02% </span>
+                <span class="strong">95.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/43</span>
+                <span class='fraction'>43/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.63% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/11</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.02% </span>
+                <span class="strong">95.55% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/43</span>
+                <span class='fraction'>43/45</span>
             </div>
         
             
@@ -105,7 +105,10 @@
 <a name='L40'></a><a href='#L40'>40</a>
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -113,9 +116,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -125,9 +128,6 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -143,31 +143,37 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span></td><td class="text"><pre class="prettyprint lang-js">import { DestroyOptions } from "sequelize";
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DestroyOptions } from "sequelize";
 import accountModel, { IAccountModel } from "./accountModel";
 import { IAccount } from "./accounts";
 &nbsp;
-export function findAll(){
+function findAll(){
    return accountModel.findAll&lt;IAccountModel&gt;();
 }
 &nbsp;
-export function findById(id: number){
+function findById(id: number){
    return accountModel.findByPk&lt;IAccountModel&gt;(id);
 }
 &nbsp;
-export function findByEmail(email: string){
+function findByEmail(email: string){
    return accountModel.findOne&lt;IAccountModel&gt;({where: {email}});
 }
 &nbsp;
-export function createAccount(account: IAccount){
+function createAccount(account: IAccount){
    return accountModel.create&lt;IAccountModel&gt;(account);
 }
 &nbsp;
-export async function updateAccount(id: number, account: IAccount){
+async function updateAccount(id: number, account: IAccount){
    const originalAccount = await accountModel.findByPk&lt;IAccountModel&gt;(id);
    if(originalAccount){
       if(account.email) <span class="branch-0 cbranch-no" title="branch not covered" >originalAccount.email = account.email</span>
@@ -180,23 +186,26 @@ export async function updateAccount(id: number, account: IAccount){
       await originalAccount.save()
       return originalAccount
    }
-   return null
-}
-&nbsp;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >export function deleteAccount(id: number){</span></span>
-<span class="cstat-no" title="statement not covered" >   return accountModel.destroy({where: {id}} as DestroyOptions&lt;IAccount&gt;)</span>
+<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >   return null</span></span>
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
-export function deleteByEmail(email: string){
+function deleteAccount(id: number){
+   return accountModel.destroy({where: {id}} as DestroyOptions&lt;IAccount&gt;)
+}
+&nbsp;
+function deleteByEmail(email: string){
    return accountModel.destroy({where: {email}} as DestroyOptions&lt;IAccount&gt;)
-}</pre></td></tr></table></pre>
+}
+&nbsp;
+export default { createAccount, deleteAccount, deleteByEmail, findAll, findByEmail, findById, updateAccount }
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-04-04T00:30:00.024Z
+                at 2023-04-08T19:31:33.555Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

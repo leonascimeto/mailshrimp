@@ -1,20 +1,28 @@
 {
-   "compilerOptions": {
-     "target": "es6",
-     "module": "commonjs",
-     "outDir": "./dist/",
-     "rootDirs": ["./src/", "../__commons__/src"],
-     "strict": true,
-     "esModuleInterop": true,
-     "forceConsistentCasingInFileNames": true,
-     "moduleResolution": "node",
-     "baseUrl": ".",
-     "paths": {
-       "ms-commons/*": ["../__commons__/src/*"]
-     },
-   },
-   "exclude": [
-     "node_modules",
-     "__tests__"
-   ]
- }
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist/",
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "ms-commons/*": [
+        "../__commons__/src/*"
+      ]
+    },
+    "rootDirs": [
+      "./src/",
+      "../__commons__/src"
+    ],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": [
+    "__tests__"
+  ],
+  "ts-node": {
+    "transpileOnly": true
+  }
+}

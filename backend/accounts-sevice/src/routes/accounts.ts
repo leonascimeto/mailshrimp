@@ -1,21 +1,22 @@
 import { Router} from 'express'
-import { addAccount, getAccount, getAccounts, loginAccount, logout, setAccount } from '../controllers/accounts'
-import { validateAccountSchema, validateLoginSchema, validateUpdateAccountSchema, validateAuth } from './middlewares'
+import accountsController from '../controllers/accounts'
+import { validateAccountSchema, validateLoginSchema, validateUpdateAccountSchema, validateAuth, bouncerAuthorize } from './middlewares'
 
 
 const router = Router()
 
-router.get('/accounts/', validateAuth, getAccounts)
+router.get('/accounts/', validateAuth, accountsController.getAccounts)
 
-router.get('/accounts/:id', validateAuth, getAccount)
+router.get('/accounts/:id', validateAuth, bouncerAuthorize, accountsController.getAccount)
 
-router.patch('/accounts/:id', validateAuth, validateUpdateAccountSchema, setAccount)
+router.patch('/accounts/:id', validateAuth, bouncerAuthorize, validateUpdateAccountSchema, accountsController.setAccount)
 
-router.post('/accounts/', validateAccountSchema, addAccount)
+router.post('/accounts/', validateAccountSchema, accountsController.addAccount)
 
-router.post('/accounts/login', validateLoginSchema, loginAccount)
+router.post('/accounts/login', validateLoginSchema, accountsController.loginAccount)
 
-router.post('/accounts/logout', logout)
+router.post('/accounts/logout', accountsController.logout)
 
+router.delete('/accounts/:id', validateAuth, bouncerAuthorize, accountsController.deleteAccounts)
 
 export default router

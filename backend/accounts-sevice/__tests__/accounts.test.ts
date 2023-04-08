@@ -1,9 +1,9 @@
-import { Response } from 'express';
+import {jest, describe, expect, it, beforeAll, afterAll} from '@jest/globals'
 import request from 'supertest';
 
 import app from '../src/app';
 import { sign } from '../src/auth';
-import { createAccount, deleteByEmail } from '../src/models/accountRepository';
+import repository from '../src/models/accountRepository';
 import { IAccount } from '../src/models/accounts';
 
 const testMail = 'jestaccounts@jest.com'
@@ -20,14 +20,14 @@ beforeAll(async () => {
      domain: 'jest.com'
   }
 
-  const result = await createAccount(testAccount)
+  const result = await repository.createAccount(testAccount)
   testID = result.id!
   token = await sign(result.id!)
 })
 
 afterAll(async () => {
-  await deleteByEmail(testMail)
-  await deleteByEmail('jest2@hotmail.com')
+  await repository.deleteByEmail(testMail)
+  await repository.deleteByEmail('jest2@hotmail.com')
 })
 
 
@@ -86,7 +86,7 @@ describe('testando rotas de accounts', () => {
     expect(result.status).toEqual(400);
   });
 
-  it('PATCH /accounts/:id - Deve retornar status code 404', async () => {
+  it('PATCH /accounts/:id - Deve retornar status code 403', async () => {
     const payload = {
       name: 'Leonardo Fernandes',
     };
@@ -96,7 +96,7 @@ describe('testando rotas de accounts', () => {
         .send(payload)
         .set('Authorization', `${token}`)
 
-    expect(result.status).toEqual(404);
+    expect(result.status).toEqual(403);
   });
 
   it('GET /accounts/ - Deve retornar status code 200', async () => {
@@ -115,12 +115,12 @@ describe('testando rotas de accounts', () => {
     expect(result.body.id).toEqual(testID);
   });
 
-  it('GET /accounts/:id - Deve retornar status code 404', async () => {
+  it('GET /accounts/:id - Deve retornar status code 403', async () => {
     const result = await request(app)
-      .get('/accounts/100')
+      .get('/accounts/-1')
       .set('Authorization', `${token}`)
 
-    expect(result.status).toEqual(404);
+    expect(result.status).toEqual(403);
   });
 
   it('GET /accounts/:id - Deve retornar status code 400', async () => {
@@ -129,6 +129,22 @@ describe('testando rotas de accounts', () => {
       .set('Authorization', `${token}`)
 
     expect(result.status).toEqual(400);
+  });
+
+  it('DEELETE /accounts/:id - Deve retornar status code 200', async () => {
+    const result = await request(app)
+      .delete('/accounts/'+ testID)
+      .set('Authorization', `${token}`)
+
+    expect(result.status).toEqual(200);
+  });
+
+  it('DEELETE /accounts/:id - Deve retornar status code 403', async () => {
+    const result = await request(app)
+      .delete('/accounts/-1')
+      .set('Authorization', `${token}`)
+
+    expect(result.status).toEqual(403);
   });
 });
 

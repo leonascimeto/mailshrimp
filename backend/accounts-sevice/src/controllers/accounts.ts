@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { IAccount } from "../models/accounts";
 import { hashPassword, comparePassword, sign } from "../auth";
-import { createAccount, findAll, findByEmail, findById, updateAccount } from "../models/accountRepository";
+import repository from "../models/accountRepository";
 
 async function getAccounts(req: Request, res: Response, next: any) {
-  const accounts : IAccount[] = await findAll()
+  const accounts : IAccount[] = await repository.findAll()
   res.json(accounts.map(item => {
     item.password = ''
     return item
@@ -13,19 +13,12 @@ async function getAccounts(req: Request, res: Response, next: any) {
 
 async function getAccount(req: Request, res: Response, next: any) {
   try {
-    const id = +req.params.id
+    const accountId = +req.params.id
+    const account = await repository.findById(accountId)
+    if(!account) return res.status(404).end()
 
-    if(!id) return res.status(400).end()
-
-    const account = await findById(id)
-    
-    if (account){
-      account.password = ''
-      return res.json(account)
-    } 
-    else
-      return res.status(404).json({message: 'Account not found'})
-
+    account.password = ''
+    return res.json(account)
   } catch (error) {
     console.log(error)
     res.status(400).end()
@@ -37,7 +30,7 @@ async function addAccount(req: Request, res: Response, next: any) {
     const newAcount: IAccount = req.body as IAccount
 
     newAcount.password = hashPassword(newAcount.password)
-    const result = await createAccount(newAcount)
+    const result = await repository.createAccount(newAcount)
 
     newAcount.id = result.id
     newAcount.password = ''
@@ -51,14 +44,10 @@ async function addAccount(req: Request, res: Response, next: any) {
 async function setAccount(req: Request, res: Response, next: any) {
   try {
     const accountId = +req.params.id
-    if(!accountId) return res.status(400).end()
-
     const accountParams: IAccount = req.body as IAccount
-    if(accountParams.password) 
-      accountParams.password = hashPassword(accountParams.password)
+    if(accountParams.password) accountParams.password = hashPassword(accountParams.password)
 
-    const updatedAccount = await updateAccount(accountId, accountParams)
-
+    const updatedAccount = await repository.updateAccount(accountId, accountParams)
     if(!updatedAccount) return res.status(404).end()
 
     updatedAccount.password = ''
@@ -72,19 +61,17 @@ async function setAccount(req: Request, res: Response, next: any) {
 async function loginAccount(req: Request, res: Response, next: any){
   try {
     const loginParams = req.body as IAccount;
-    const account = await findByEmail(loginParams.email)
-
+    const account = await repository.findByEmail(loginParams.email)
     if(!account) return res.status(401).end()
-    
+
     const isValid = comparePassword(loginParams.password, account.password)
     if(!isValid) return res.status(401).end()
 
     const token = sign(account.id!)
-    
     res.json({auth: true, token})
-    
   } catch (error) {
-    
+    console.log(`loginAccount: ${error}`)
+    res.status(400).end()
   }
 }
 
@@ -92,4 +79,15 @@ function logout(req: Request, res: Response, next: any){
   res.json({auth: false, token: null})
 }
 
-export { getAccounts, getAccount, addAccount, setAccount, loginAccount, logout}
+async function deleteAccounts(req: Request, res: Response, next: any) {
+  try {
+    const accountId = +req.params.id
+    await repository.deleteAccount(accountId)
+    res.status(200).end()
+  } catch (error) {
+    console.log(`logoutAccount: ${error}`)
+    res.status(400).end()
+  }  
+}
+
+export default { getAccounts, getAccount, addAccount, setAccount, loginAccount, logout, deleteAccounts}
