@@ -9,7 +9,7 @@
     "start": "node -r dotenv/config  -r tsconfig-paths/register ./dist/contacts-server/src/server",
     "dev": "ts-node -r dotenv/config -r tsconfig-paths/register ./src/server",
     "compile": "tsc && node -r dotenv/config -r tsconfig-paths/register ./dist/contacts-server/src/server",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "dotenv-safe": "^8.2.0",

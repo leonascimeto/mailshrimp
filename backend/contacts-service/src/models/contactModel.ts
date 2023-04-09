@@ -25,7 +25,6 @@ export default database.define<IContactModel>("contact", {
    email: {
       type: Sequelize.STRING(150),
       allowNull: false,
-      unique: true
    },
    phone: {
       type: Sequelize.STRING(20),
@@ -36,4 +35,11 @@ export default database.define<IContactModel>("contact", {
       allowNull: false,
       defaultValue: 100
    }
+}, {
+   indexes: [
+      {
+         unique: true,
+         fields: ["email", "accountId"]
+      }
+   ]
 })

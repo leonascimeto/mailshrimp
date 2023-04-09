@@ -16,7 +16,6 @@ function validateSchema(schema: Joi.ObjectSchema<any>, req: Request, res: Respon
 async function validateAuth(req: Request, res: Response, next: any) {
    try {
       const token = req.headers.authorization as string
-      console.log({token})
       if(!token) return res.status(401).end()
 
       const payload = await auth.verify(token)
