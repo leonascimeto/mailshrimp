@@ -16,7 +16,7 @@ export default function Header() {
                      <Link href="/messages">Mensagens</Link>
                   </li>
                   <li>
-                     <Link href="/signin">Sair</Link>
+                     <Link href="/">Sair</Link>
                   </li>
                </ul>
             </nav>

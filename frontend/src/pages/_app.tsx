@@ -1,5 +1,6 @@
 import Header from '@/components/header/header'
-import '@/styles/globals.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 
@@ -8,7 +9,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       {
-      router.pathname !== '/signin' && <Header />
+      router.pathname !== '/' && <Header />
       }
       <Component {...pageProps} />
     </>
