@@ -2,10 +2,13 @@ import Image from 'next/image'
 import {Container, Button, Col, Row, Alert, Form} from 'react-bootstrap'
 import Logo from '../../assets/logo.png'
 import { BoxContent } from './styles'
-import { BoxForm } from '../styles'
+import { BoxForm } from './styles'
 import { FormEvent, useEffect, useState } from 'react'
+import api from '@/services/api'
+import { useRouter } from 'next/router'
 
 export default function Signup() {
+   const router = useRouter();
    const [name, setName] = useState('')
    const [email, setEmail] = useState('')
    const [domain, setDomain] = useState('')
@@ -17,15 +20,31 @@ export default function Signup() {
    async function handleSignup(event: FormEvent) {
       event.preventDefault()
       setIsLoading(true)
-      if (password !== passwordConfirm) {
-         setError('As senhas não conferem')
+      new Promise(resolve => setTimeout(resolve, 5000))
+
+      if(!name || !email || !domain || !password || !passwordConfirm) {
+         setError('Preencha todos os campos')
+         setIsLoading(false)
          return
-         
+      }
+      if(password !== passwordConfirm) {
+         setError('As senhas não conferem')
+         setIsLoading(false)
+         return
       }
 
-      console.log({name, email, domain, password, passwordConfirm})
-      
-      setIsLoading(false)
+      try {
+         await api.post('accounts', {
+            name, email, domain, password
+         })
+         router.push('/')
+         setError('')
+         setIsLoading(false)
+      } catch (error) {
+         console.log(error)
+         setError('Erro ao realizar cadastro')
+         setIsLoading(false)
+      }   
    }
 
    function renderError() {
@@ -42,7 +61,7 @@ export default function Signup() {
                <BoxForm>
                   <h2>Cadastro</h2>
                   <p>Informe seus dados para realizar o cadastro.</p>
-                  <Form>
+                  <Form onSubmit={handleSignup}>
                      {error && renderError()}
                      <Form.Group controlId="formBasicName">
                         <Form.Label>Nome</Form.Label>
@@ -84,8 +103,8 @@ export default function Signup() {
                            onChange={(e) => setPasswordConfirm(e.target.value)} 
                         />
                      </Form.Group>
-                     <Button className='w-100 mt-2' variant="primary" onClick={handleSignup}>
-                        Cadastrar
+                     <Button className='w-100 mt-2' variant="primary" disabled={isLoading} type='submit'>
+                        {!isLoading ? 'Cadastrar' : 'Carregando...'}
                      </Button>
                   </Form>
                </BoxForm>

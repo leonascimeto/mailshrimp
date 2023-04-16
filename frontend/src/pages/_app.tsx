@@ -9,7 +9,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       {
-      router.pathname !== '/' && <Header />
+        router.pathname !== '/signin' &&
+        router.pathname !== '/signup' &&
+        <Header />
       }
       <Component {...pageProps} />
     </>
